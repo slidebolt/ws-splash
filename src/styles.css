@@ -1,10 +1,11 @@
 :root {
-  --brand-orange: #ff6d00;
-  --brand-blue: #0083e8;
+  --brand-orange: #f5d142;
+  --brand-blue: #004aff;
   --brand-white: #ffffff;
-  --logo-shift: clamp(54px, 9vw, 82px);
+  --logo-size: clamp(120px, 18vw, 220px);
+  --logo-shift: clamp(80px, 12vw, 120px);
   --word-width: clamp(240px, 48vw, 540px);
-  --word-gap: clamp(12px, 1.8vw, 20px);
+  --word-gap: clamp(16px, 2.5vw, 32px);
   color: var(--brand-white);
   background: var(--brand-orange);
   font-family: "Archivo Black", sans-serif;
@@ -19,69 +20,114 @@ body,
 #root {
   margin: 0;
   width: 100%;
-  min-height: 100%;
 }
 
 body {
-  min-height: 100vh;
-  overflow: hidden;
-  position: relative;
-  display: grid;
-  place-items: center;
-  isolation: isolate;
   background: var(--brand-orange);
+  min-height: 250vh;
+  overflow-x: hidden;
 }
 
-body::before,
-body::after {
-  content: "";
-  position: absolute;
-  inset: auto;
+/* Fixed Elements */
+.github-link-fixed {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background-color: var(--brand-blue);
+  color: var(--brand-white);
+  padding: 10px 20px;
   border-radius: 999px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  z-index: 1000;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.github-link-fixed:hover {
+  transform: translateY(-2px);
+  background-color: #003dcc;
+}
+
+.corner-brand-fixed {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  opacity: 0;
   pointer-events: none;
-  z-index: -1;
 }
 
-body::before {
-  width: min(56vw, 560px);
-  height: min(56vw, 560px);
-  top: -18vw;
-  left: -10vw;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 72%);
+.corner-logo-wrap {
+  width: 48px;
+  height: 48px;
 }
 
-body::after {
-  width: min(46vw, 420px);
-  height: min(46vw, 420px);
-  right: -12vw;
-  bottom: -18vw;
-  background: radial-gradient(circle, rgba(0, 131, 232, 0.18) 0%, rgba(0, 131, 232, 0) 70%);
+.corner-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-.stage {
-  position: relative;
-  width: 100vw;
+.corner-text {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Scroll-driven animations */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .brand-center {
+      animation: fade-out linear both;
+      animation-timeline: scroll();
+      animation-range: 0vh 50vh;
+    }
+    
+    .corner-brand-fixed {
+      animation: fade-in linear both;
+      animation-timeline: scroll();
+      animation-range: 40vh 80vh;
+    }
+    
+    .text-block {
+      animation: fade-up-text linear both;
+      animation-timeline: scroll();
+      animation-range: 40vh 120vh;
+    }
+  }
+}
+
+/* Hero Section */
+.hero {
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  position: sticky;
+  top: 0;
 }
 
-.brand {
+.brand-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 100%;
 }
 
 .logo-wrap {
-  width: clamp(96px, 12vw, 124px);
-  height: clamp(96px, 12vw, 124px);
+  width: var(--logo-size);
+  height: var(--logo-size);
   flex: 0 0 auto;
   transform: translateX(0);
   animation: slide-left 1s cubic-bezier(0.22, 1, 0.36, 1) forwards 0.35s;
-  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.14));
+  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.16));
 }
 
 .logo {
@@ -109,38 +155,87 @@ body::after {
   animation: text-in 0.8s ease forwards 0.95s;
 }
 
-@keyframes slide-left {
-  from {
-    transform: translateX(0);
-  }
+/* Content Section */
+.content-section {
+  padding: 0 24px 120px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 50;
+}
 
-  to {
-    transform: translateX(calc(var(--logo-shift) * -1));
-  }
+.text-block {
+  max-width: 800px;
+  color: var(--brand-white);
+  line-height: 1.8;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--brand-blue);
+  padding: 60px;
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.text-block h2 {
+  font-family: "Archivo Black", sans-serif;
+  font-size: 32px;
+  margin-top: 0;
+  color: var(--brand-white);
+}
+
+.footer {
+  padding: 40px 24px 60px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 50;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-nav a {
+  color: var(--brand-white);
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.footer-nav a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Keyframes */
+@keyframes fade-out {
+  to { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; pointer-events: auto; }
+}
+
+@keyframes fade-up-text {
+  from { opacity: 0; transform: translateY(100px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(var(--logo-shift) * -1)); }
 }
 
 @keyframes reveal-space {
-  from {
-    width: 0;
-    margin-left: 0;
-  }
-
-  to {
-    width: var(--word-width);
-    margin-left: var(--word-gap);
-  }
+  from { width: 0; margin-left: 0; }
+  to { width: var(--word-width); margin-left: var(--word-gap); }
 }
 
 @keyframes text-in {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @media (max-width: 640px) {
@@ -149,31 +244,8 @@ body::after {
     --word-width: min(66vw, 290px);
     --word-gap: 10px;
   }
-
   .text {
     font-size: clamp(28px, 9vw, 40px);
     letter-spacing: 0.14em;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .logo-wrap,
-  .text-wrap,
-  .text {
-    animation: none;
-  }
-
-  .logo-wrap {
-    transform: translateX(calc(var(--logo-shift) * -1));
-  }
-
-  .text-wrap {
-    width: var(--word-width);
-    margin-left: var(--word-gap);
-  }
-
-  .text {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
